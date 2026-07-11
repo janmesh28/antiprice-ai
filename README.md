@@ -80,3 +80,104 @@ docker compose up -d
 2. **Review Summaries**: Queries OpenAI models to digest user reviews, separating praises from complaints, and rating product reliability.
 3. **Linear Regression Forecasting**: Employs mathematical regressions to project pricing ranges for the next 7 and 30 days, suggesting buying actions.
 4. **Fuzzy Search Indexes**: Uses Elasticsearch to run instant, type-tolerant matches over titles and brands.
+
+## Features
+
+- Compare prices from Amazon, Flipkart and Croma
+- AI shopping assistant
+- Product recommendations
+- Price prediction
+- Review summarization
+- Elasticsearch search
+- Dockerized deployment
+- Real-time scraping
+
+## Future Scope
+
+- Google Login
+- Wishlist
+- Price Alerts
+- Browser Extension
+- Mobile App
+- WhatsApp Notifications
+- AI Review Analysis
+
+## Tech Stack
+
+Frontend
+- Next.js 16
+- React
+- TypeScript
+- Tailwind CSS
+
+Backend
+- NestJS
+- Prisma ORM
+- TypeScript
+
+Database
+- PostgreSQL
+
+Caching
+- Redis
+
+Search
+- Elasticsearch
+
+Web Scraping
+- Playwright
+
+AI
+- OpenAI API
+
+# AntiPrice AI
+![Next.js]
+![NestJS]
+![TypeScript]
+![Docker]
+![PostgreSQL]
+![Redis]
+![Elasticsearch]
+![License]
+
+# AntiPrice AI
+
+AI-powered price comparison platform.
+
+---
+
+## Home Page
+
+<p align="center">
+<img src="images/home.png" width="900">
+</p>
+
+---
+
+## Product Comparison
+
+<p align="center">
+<img src="images/price comparison.png" width="900">
+</p>
+
+---
+
+## AI Chatbot
+
+<p align="center">
+<img src="images/chatbot.png" width="900">
+</p>
+
+---
+
+## Price Prediction
+
+<p align="center">
+<img src="images/prediction.png" width="900">
+</p>
+
+## Docker Running (docker ps or Docker Desktop)
+
+<p align="center">
+<img src="images/Docker Running.png" width="900">
+</p>
