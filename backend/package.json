@@ -20,7 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-   "@elastic/elasticsearch": "^8.10.0",
+    "@elastic/elasticsearch": "^8.10.0",
     "@langchain/core": "^1.1.48",
     "@langchain/openai": "^1.4.7",
     "@nestjs/bull": "^11.0.4",
@@ -42,6 +42,7 @@
     "class-validator": "^0.15.1",
     "ioredis": "^5.11.1",
     "langchain": "^1.4.4",
+    "ollama": "^0.6.3",
     "openai": "^6.42.0",
     "playwright": "^1.60.0",
     "prisma": "^6.4.0",

@@ -1,21 +1,17 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import OpenAI from 'openai';
+import ollama from 'ollama';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class AiService {
   private readonly logger = new Logger(AiService.name);
-  private openai: OpenAI;
+  
 
   constructor(
-    private readonly configService: ConfigService,
-    private readonly prisma: PrismaService,
-  ) {
-    const apiKey = this.configService.get<string>('OPENAI_API_KEY') || 'dummy-key';
-    this.openai = new OpenAI({ apiKey });
-  }
-
+  private readonly configService: ConfigService,
+  private readonly prisma: PrismaService,
+) {}
   /**
    * Analyzes reviews of a product using AI.
    * Generates a summary, sentiment score, pros/cons, and a reliability score.
@@ -53,24 +49,23 @@ export class AiService {
         return this.simulateReviewAnalysis(reviews);
       }
 
-      const response = await this.openai.chat.completions.create({
-        model: 'gpt-4o-mini',
-        messages: [
-          {
-            role: 'system',
-            content:
-              'You are an expert product analyst. Analyze the provided reviews and return a JSON summary. Structure: { "summary": string, "sentimentScore": number (0-100), "praises": string[], "complaints": string[], "reliabilityScore": number (0-100) }',
-          },
-          {
-            role: 'user',
-            content: `Product Name: ${product.name}\nReviews:\n${reviewsText}`,
-          },
-        ],
-        response_format: { type: 'json_object' },
-      });
+    const response = await ollama.chat({
+  model: 'gemma3:4b',
+  messages: [
+    {
+      role: 'system',
+      content:
+        'You are an expert product analyst. Analyze the provided reviews and return ONLY valid JSON with summary, sentimentScore, praises, complaints and reliabilityScore.',
+    },
+    {
+      role: 'user',
+      content: `Product Name: ${product.name}\nReviews:\n${reviewsText}`,
+    },
+  ],
+});
 
-      const result = JSON.parse(response.choices[0].message?.content || '{}');
-      return result;
+const result = JSON.parse(response.message.content);
+return result;
     } catch (error) {
       this.logger.error(`AI analysis failed: ${error}`);
       return this.simulateReviewAnalysis(reviews);
@@ -124,27 +119,24 @@ Here are some products currently in our comparison database:\n${contextText}\n
 Help the user compare specs, find cheapest platforms, and give clear budget/performance arguments. Always be concise.`,
       };
 
-      if (this.configService.get<string>('OPENAI_API_KEY') === 'your-openai-api-key-here' || !this.configService.get<string>('OPENAI_API_KEY')) {
-        return {
-          content: `Hello! I am AntiPrice AI. I see you're asking about electronics. (Note: OpenAI API Key not configured; showing mock response). 
-Based on our database, you can compare top products like ASUS Zenbook or MacBook Air. Let me know which one you prefer, or ask for the cheapest RTX laptop under your budget!`,
-        };
-      }
+     const response = await ollama.chat({
+  model: 'gemma3:4b',
+  messages: [systemPrompt, ...messages],
+});
 
-      const response = await this.openai.chat.completions.create({
-        model: 'gpt-4o-mini',
-        messages: [systemPrompt, ...messages],
-      });
+return {
+  content: response.message.content,
+};
+    } catch (error: any) {
+  console.error("===== OPENAI ERROR =====");
+  console.error(error);
 
-      return {
-        content: response.choices[0].message?.content || '',
-      };
-    } catch (error) {
-      this.logger.error(`AI chatbot failed: ${error}`);
-      return {
-        content: 'I apologize, but I am currently offline. Please try again later.',
-      };
-    }
+  this.logger.error(error);
+
+  return {
+    content: error?.message || "Unknown OpenAI error",
+  };
+}
   }
 
   /**
