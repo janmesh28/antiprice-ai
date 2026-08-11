@@ -15,7 +15,7 @@ RUN npm ci --only=production
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules/@prisma/client ./node_modules/@prisma/client
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/.env ./.env
+
 
 EXPOSE 3001
 CMD ["node", "dist/main"]
