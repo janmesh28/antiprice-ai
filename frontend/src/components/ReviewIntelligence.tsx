@@ -16,6 +16,7 @@ interface ReviewIntelligenceProps {
 }
 
 export default function ReviewIntelligence({ productId }: ReviewIntelligenceProps) {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [analysis, setAnalysis] = useState<ReviewAnalysis | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -23,7 +24,7 @@ export default function ReviewIntelligence({ productId }: ReviewIntelligenceProp
     async function fetchAnalysis() {
       setLoading(true);
       try {
-        const res = await fetch(`http://localhost:3001/ai/${productId}/reviews`);
+        const res = await fetch(`${API_URL}/ai/${productId}/reviews`);
         const data = await res.json();
         setAnalysis(data);
       } catch (err) {

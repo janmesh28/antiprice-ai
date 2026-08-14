@@ -17,13 +17,14 @@ interface RecommendationsProps {
 }
 
 export default function Recommendations({ onSelectProduct }: RecommendationsProps) {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [recommendations, setRecommendations] = useState<RecommendedProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchRecs() {
       try {
-        const res = await fetch("http://localhost:3001/products/recommendations");
+        const res = await fetch(`${API_URL}/products/recommendations`);
         const data = await res.json();
         setRecommendations(data);
       } catch (err) {

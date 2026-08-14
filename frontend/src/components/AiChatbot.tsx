@@ -9,6 +9,7 @@ interface Message {
 }
 
 export default function AiChatbot() {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -33,7 +34,7 @@ export default function AiChatbot() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:3001/ai/chat", {
+      const res = await fetch(`${API_URL}/ai/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: newMessages }),

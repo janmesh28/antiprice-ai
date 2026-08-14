@@ -16,6 +16,7 @@ interface PricePredictionProps {
 }
 
 export default function PricePrediction({ productId }: PricePredictionProps) {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [prediction, setPrediction] = useState<Prediction | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -23,7 +24,7 @@ export default function PricePrediction({ productId }: PricePredictionProps) {
     async function fetchPrediction() {
       setLoading(true);
       try {
-        const res = await fetch(`http://localhost:3001/ai/${productId}/predict`);
+        const res = await fetch(`${API_URL}/ai/${productId}/predict`);
         const data = await res.json();
         setPrediction(data);
       } catch (err) {

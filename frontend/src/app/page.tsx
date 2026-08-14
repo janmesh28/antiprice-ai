@@ -37,6 +37,7 @@ interface ProductCompare {
 }
 
 export default function Home() {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<ProductCompare[]>([]);
@@ -56,7 +57,9 @@ export default function Home() {
     setSelectedProduct(null);
 
     try {
-      const res = await fetch(`http://localhost:3001/products/search?q=${encodeURIComponent(searchQuery)}`);
+      const res = await fetch(
+  `${API_URL}/products/search?q=${encodeURIComponent(searchQuery)}`
+);
       const data = await res.json();
       setResults(data);
       if (data.length > 0) {
@@ -72,7 +75,7 @@ export default function Home() {
 
   const fetchHistory = async (id: string) => {
     try {
-      const res = await fetch(`http://localhost:3001/products/${id}/history`);
+      const res = await fetch(`${API_URL}/products/${id}/history`);
       const data = await res.json();
       setHistoryData(data);
     } catch (err) {
