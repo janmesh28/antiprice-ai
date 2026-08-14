@@ -7,9 +7,25 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   imports: [
     ElasticsearchModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: (config: ConfigService) => ({
-        node: config.get('ELASTICSEARCH_URL', 'http://localhost:9200'),
-      }),
+      useFactory: (config: ConfigService) => {
+        const node = config.get<string>(
+          'ELASTICSEARCH_URL',
+          'http://localhost:9200',
+        );
+
+        const apiKey = config.get<string>('ELASTICSEARCH_API_KEY');
+
+        return {
+          node,
+          ...(apiKey
+            ? {
+                auth: {
+                  apiKey,
+                },
+              }
+            : {}),
+        };
+      },
       inject: [ConfigService],
     }),
   ],
